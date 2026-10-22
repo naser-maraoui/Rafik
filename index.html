@@ -2,14 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>دعوة زفاف · علي و أمل</title>
 
 <!-- ========== SOCIAL MEDIA PREVIEW META TAGS (Open Graph) ========== -->
 <meta property="og:title" content="دعوة زفاف · علي و أمل">
 <meta property="og:description" content="تشرفنا دعوتكم لحضور حفل زفافنا يوم 30 أكتوبر 2026. نسعد بحضوركم وفرحتكم معنا!">
-<meta property="og:image" content="https://naser-maraoui.github.io/Rafik/preview.png"> <!-- استبدل هذا برابط الصورة المصغرة التي تريد ظهورها عند مشاركة الرابط -->
-<meta property="og:url" content="https://naser-maraoui.github.io/Rafik/"> <!-- رابط موقعك أو صفحة الدعوة -->
+<meta property="og:image" content="https://naser-maraoui.github.io/Rafik/preview.png">
+<meta property="og:url" content="https://naser-maraoui.github.io/Rafik/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_AR">
 
@@ -34,7 +34,12 @@
     --ink:#4A3B2E;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{height:100%;}
+  html,body{
+    height:100%;
+    width:100%;
+    overflow:hidden;
+    position:fixed; /* iOS Safari stability fix */
+  }
   body{
     background: #1f1916;
     font-family:'Tajawal', sans-serif;
@@ -45,7 +50,8 @@
   .phone{
     width:100%;
     max-width:480px;
-    min-height:100dvh;
+    height:100dvh;
+    height:100vh;
     background: url('img.jpg') center top / cover no-repeat;
     position:relative;
     overflow:hidden;
@@ -92,18 +98,21 @@
 
   .scroller{
     height:100dvh;
+    height:100vh;
     overflow-y:auto;
+    -webkit-overflow-scrolling: touch; /* iOS Momentum Scrolling Fix */
     scroll-snap-type:y proximity;
     scroll-behavior:smooth;
     position: relative;
     z-index: 1;
   }
   .scroller::-webkit-scrollbar{display:none;}
-  .scroller.locked{ overflow:hidden; touch-action:none; }
+  .scroller.locked{ overflow:hidden !important; touch-action:none; }
   
   section{
     scroll-snap-align:start;
     min-height:100dvh;
+    min-height:100vh;
     width:100%;
     position:relative;
     display:flex;
@@ -143,7 +152,7 @@
     justify-content: space-between;
     padding: 50px 20px;
     cursor: pointer;
-    transition: opacity 1.2s ease;
+    transition: opacity 0.8s ease, visibility 0.8s;
   }
   .video-splash::before {
     content: '';
@@ -202,35 +211,24 @@
     0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(122,62,77,0.35); }
     50% { transform: scale(1.04); box-shadow: 0 12px 30px rgba(197,168,128,0.5); }
   }
-  .video-splash.hidden { opacity: 0; pointer-events: none; }
+  .video-splash.hidden { 
+    opacity: 0; 
+    visibility: hidden;
+    pointer-events: none !important; 
+  }
 
   /* ---------- MUSIC TOGGLE ---------- */
   .music-toggle{
     position:absolute; top:24px; left:24px; z-index:40; width:42px; height:42px;
     padding:0; border-radius:50%; border:1px solid var(--gold);
     background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     box-shadow:0 6px 16px rgba(122,62,77,0.12); cursor:pointer; color:var(--wine); display:none;
   }
   .music-toggle.visible { display: block; }
   .music-toggle svg{ position:absolute; top:50%; left:50%; width:18px; height:18px; transform:translate(-50%, -50%); pointer-events:none; }
   .music-toggle .icon-play{ opacity:1; } .music-toggle .icon-pause{ opacity:0; }
   .music-toggle.playing .icon-play{ opacity:0; } .music-toggle.playing .icon-pause{ opacity:1; }
-
-  /* ---------- LUXURY WELCOME GUEST BADGE ---------- */
-  .welcome-guest-badge {
-    background: rgba(255, 255, 255, 0.96); border: 1.5px solid var(--gold);
-    padding: 14px 34px; border-radius: 16px; margin-bottom: 16px;
-    box-shadow: 0 8px 25px rgba(122,62,77,0.1); position: relative;
-    display: inline-flex; flex-direction: column; align-items: center;
-  }
-  .welcome-guest-badge::before, .welcome-guest-badge::after {
-    content: '✧'; color: var(--gold); font-size: 13px; position: absolute; top: 50%; transform: translateY(-50%);
-  }
-  .welcome-guest-badge::before { left: 14px; }
-  .welcome-guest-badge::after { right: 14px; }
-  
-  .welcome-guest-badge span { font-size: 11px; color: var(--ink); letter-spacing: 0.5px; margin-bottom: 2px; }
-  .welcome-guest-badge strong { font-size: 18px; color: var(--wine); font-family: 'Aref Ruqaa', serif; }
 
   /* ---------- RINGS ICON ---------- */
   .wedding-rings-container {
@@ -293,19 +291,32 @@
 
   .date-pill{ margin-top:18px; font-size:13px; font-weight: 700; color:var(--wine); background:rgba(255,255,255,0.95); border:1.5px solid var(--gold); padding:8px 20px; border-radius:30px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 
-  /* ---------- HIGHLY DECORATED PROGRAM CARD ---------- */
+  /* ---------- PROGRAM SECTION (MULTIPLE CARDS SUPPORT) ---------- */
+  #program {
+    min-height: auto;
+    padding-top: 50px;
+    padding-bottom: 60px;
+  }
   .prog-title{ font-family:'Aref Ruqaa', serif; font-size:32px; color:var(--wine); margin-bottom:20px; }
   
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+  }
+
   .single-event-card {
     background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,248,249,0.96));
     border-radius: 24px;
     border: 2px solid var(--gold);
-    padding: 38px 24px;
+    padding: 30px 20px;
     width: 90%;
     max-width: 340px;
     position: relative;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(122,62,77,0.15);
+    box-shadow: 0 12px 30px rgba(122,62,77,0.12);
   }
   
   .single-event-card::before {
@@ -328,7 +339,7 @@
 
   .card-corner {
     position: absolute;
-    width: 24px; height: 24px;
+    width: 20px; height: 20px;
     border: 2px solid var(--wine);
     z-index: 5;
     pointer-events: none;
@@ -339,34 +350,34 @@
   .cc-br { bottom: 14px; right: 14px; border-left: none; border-top: none; }
 
   .card-crown {
-    width: 40px; height: 16px; margin: 0 auto 10px;
+    width: 40px; height: 14px; margin: 0 auto 8px;
     background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
     position: relative;
   }
   .card-crown::after {
     content: '⚜'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    font-size: 22px; color: var(--wine);
+    font-size: 20px; color: var(--wine);
   }
   
-  .ev-date{ font-size:12px; color:var(--wine); letter-spacing:1.5px; margin-bottom:6px; font-weight:700;}
-  .ev-name{ font-family:'Aref Ruqaa', serif; font-size:26px; color:var(--wine); margin-bottom:6px; }
-  .ev-place{ font-size:15px; color:var(--ink); margin-bottom:6px; font-weight:700;}
-  .ev-time{ font-size:13.5px; color:var(--wine); margin-bottom:16px; font-weight:600; background: rgba(197,168,128,0.15); display: inline-block; padding: 4px 18px; border-radius: 20px;}
+  .ev-date{ font-size:12px; color:var(--wine); letter-spacing:1.5px; margin-bottom:4px; font-weight:700;}
+  .ev-name{ font-family:'Aref Ruqaa', serif; font-size:24px; color:var(--wine); margin-bottom:4px; }
+  .ev-place{ font-size:14px; color:var(--ink); margin-bottom:4px; font-weight:700;}
+  .ev-time{ font-size:13px; color:var(--wine); margin-bottom:12px; font-weight:600; background: rgba(197,168,128,0.15); display: inline-block; padding: 4px 16px; border-radius: 20px;}
   
   .card-divider-dots {
-    font-size: 12px; color: var(--gold); letter-spacing: 4px; margin-bottom: 14px;
+    font-size: 11px; color: var(--gold); letter-spacing: 4px; margin-bottom: 10px;
   }
 
   .ev-link{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    font-size:13.5px; color:#fff; font-weight:700; border: none;
-    padding: 10px 24px; border-radius: 30px; text-decoration:none; 
+    font-size:13px; color:#fff; font-weight:700; border: none;
+    padding: 8px 22px; border-radius: 30px; text-decoration:none; 
     background: linear-gradient(135deg, var(--wine), #5c2731);
-    box-shadow: 0 5px 15px rgba(122,62,77,0.3);
+    box-shadow: 0 5px 15px rgba(122,62,77,0.25);
     transition: transform 0.2s;
   }
   .ev-link:hover { transform: scale(1.03); }
-  .ev-link svg { width: 15px; height: 15px; }
+  .ev-link svg { width: 14px; height: 14px; }
 
   .closing{ margin-top:24px; font-family:'Aref Ruqaa', serif; font-size:26px; color:var(--wine); }
   .closing-sub{ margin-top:4px; font-size:14px; color:var(--ink); font-weight:700; letter-spacing: 1px;}
@@ -431,12 +442,6 @@
 
     <!-- ================= WELCOME ================= -->
     <section id="welcome">
-
-      <!--  Enhanced Welcome Section Guest Badge
-      <div class="welcome-guest-badge cine-fade">
-        <span>مرحباً بك عزيزي الضيف</span>
-        <strong>Rafik Ben Ayed</strong>
-      </div> -->
 
       <p class="dua cine-fade">بارك الله لهما وبارك عليهما<br>وجمع بينهما في خير</p>
       
@@ -526,27 +531,47 @@
       </div>
     </section>
 
-    <!-- ================= SINGLE PROGRAM EVENT ================= -->
+    <!-- ================= PROGRAM SECTION (2 CARDS) ================= -->
     <section id="program">
       <div class="prog-title cine-fade">برنامج الحفل</div>
 
-      <div class="single-event-card cine-fade">
-        <!-- Ornate Corners -->
-        <div class="card-corner cc-tl"></div>
-        <div class="card-corner cc-tr"></div>
-        <div class="card-corner cc-bl"></div>
-        <div class="card-corner cc-br"></div>
+      <div class="cards-container">
+        <!-- CARD 1: عقد القران -->
+        <div class="single-event-card cine-fade">
+          <div class="card-corner cc-tl"></div>
+          <div class="card-corner cc-tr"></div>
+          <div class="card-corner cc-bl"></div>
+          <div class="card-corner cc-br"></div>
 
-        <div class="card-crown"></div>
-        <div class="ev-date">2026 / 10 / 30</div>
-        <div class="ev-name">حفل الزفاف</div>
-        <div class="card-divider-dots">✦ ✦ ✦</div>
-        <div class="ev-place">بقاعة الأفراح  "Le Palace Miami"</div>
-        <div class="ev-place">طريق سيدي منصور كلم 1.5 بصفاقس</div>
-        <div class="ev-time">الساعة 21:00 ليلاً</div>
-        <a class="ev-link" href="https://maps.app.goo.gl/RXcB1Sj52KmBmmtp6" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-6-5.7-6-10a6 6 0 1112 0c0 4.3-6 10-6 10z"/><circle cx="12" cy="11" r="2.3"/></svg> الموقع على الخريطة
-        </a>
+          <div class="card-crown"></div>
+          <div class="ev-date">2026 / 10 / 24</div>
+          <div class="ev-name">إشهار عقد قران 💍</div>
+          <div class="card-divider-dots">✦ ✦ ✦</div>
+          <div class="ev-place">جامع سيدي اللخمي </div>
+          <div class="ev-time">الساعة 14:00 مساءا</div>
+          <a class="ev-link" href="https://maps.app.goo.gl/DxhRL7KwaoFNcMhM7" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-6-5.7-6-10a6 6 0 1112 0c0 4.3-6 10-6 10z"/><circle cx="12" cy="11" r="2.3"/></svg> الموقع على الخريطة
+          </a>
+        </div>
+
+        <!-- CARD 2: حفل الزفاف -->
+        <div class="single-event-card cine-fade">
+          <div class="card-corner cc-tl"></div>
+          <div class="card-corner cc-tr"></div>
+          <div class="card-corner cc-bl"></div>
+          <div class="card-corner cc-br"></div>
+
+          <div class="card-crown"></div>
+          <div class="ev-date">2026 / 10 / 30</div>
+          <div class="ev-name">حفل الزفاف</div>
+          <div class="card-divider-dots">✦ ✦ ✦</div>
+          <div class="ev-place">بقاعة الأفراح "Le Palace Miami"</div>
+          <div class="ev-place" style="font-size: 13px; opacity: 0.9;">طريق سيدي منصور كلم 1.5 بصفاقس</div>
+          <div class="ev-time">الساعة 21:00 ليلاً</div>
+          <a class="ev-link" href="https://maps.app.goo.gl/RXcB1Sj52KmBmmtp6" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-6-5.7-6-10a6 6 0 1112 0c0 4.3-6 10-6 10z"/><circle cx="12" cy="11" r="2.3"/></svg> الموقع على الخريطة
+          </a>
+        </div>
       </div>
 
       <div class="closing cine-fade" style="margin-top: 30px;">بحضوركم يكتمل فرحنا</div>
@@ -585,24 +610,30 @@
   const musicToggle = document.getElementById('musicToggle');
   const bgMusic = document.getElementById('bgMusic');
 
+  function unlockInvitation() {
+    videoSplash.classList.add('hidden');
+    scroller.classList.remove('locked');
+    musicToggle.classList.add('visible');
+  }
+
   videoSplash.addEventListener('click', () => {
     playHint.style.animation = 'none';
     playHint.style.display = 'none';
     playMusic();
-    introVideo.play().catch(e => console.log("Autoplay prevented", e));
-  });
-
-  introVideo.addEventListener('ended', () => {
-    videoSplash.classList.add('hidden');
-    scroller.classList.remove('locked');
-    musicToggle.classList.add('visible'); 
+    introVideo.play().then(() => {
+      // Optional: Auto dismiss splash when video completes
+      introVideo.onended = unlockInvitation;
+    }).catch(e => {
+      console.log("Video Play Error / Interrupted", e);
+      unlockInvitation();
+    });
   });
 
   let musicPlaying = false;
   function playMusic(){
     bgMusic.volume = 0.55;
     bgMusic.muted = false;
-    bgMusic.play();
+    bgMusic.play().catch(e => console.log("Music play blocked", e));
     musicToggle.classList.add('playing');
     musicPlaying = true;
   }
@@ -622,6 +653,7 @@
   function pad(n){ return String(n).padStart(2,'0'); }
   function setRing(id, fraction){
     const el = document.getElementById(id);
+    if (!el) return;
     const offset = CIRC * (1 - Math.max(0, Math.min(1, fraction)));
     el.style.strokeDasharray = CIRC;
     el.style.strokeDashoffset = offset;
@@ -680,9 +712,9 @@
     const hourDeg = (h * 30) + (m * 0.5);
     const minDeg = m * 6 + s * 0.1;
     const secDeg = s * 6;
-    handHour.style.transform = `rotate(${hourDeg}deg)`;
-    handMin.style.transform = `rotate(${minDeg}deg)`;
-    handSec.style.transform = `rotate(${secDeg}deg)`;
+    if (handHour) handHour.style.transform = `rotate(${hourDeg}deg)`;
+    if (handMin) handMin.style.transform = `rotate(${minDeg}deg)`;
+    if (handSec) handSec.style.transform = `rotate(${secDeg}deg)`;
   }
   tickClock();
   setInterval(tickClock, 1000);
